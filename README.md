@@ -50,7 +50,8 @@ The application is deployed and accessible at [https://rizmiya-bookworm.surge.sh
 
 ## License
 
-This project is licensed under the [MIT License](https://github.com/rizmiya-ameen/book-worm/blob/main/LICENSE).
+This project is licensed under the [MIT License](https://github.com/rizmiya-ameen/book-worm?tab=MIT-1-ov-file).
+
 
 ## Acknowledgements
 
