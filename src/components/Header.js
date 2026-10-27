@@ -1,7 +1,7 @@
 import { useNavigate, Outlet, Link } from 'react-router-dom'
 import React, { useState } from 'react'
 import { Search, SearchIconWrapper, StyledInputBase } from '../SearchStyles'
-import { AppBar, Toolbar, Box, Button, FormControl, Tabs, Tab } from '@mui/material'
+import { AppBar, Toolbar, Box, Button, FormControl, Tabs, Tab, useMediaQuery, useTheme } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import HeaderIcons from './HeaderIcons'
 
@@ -12,9 +12,14 @@ const Header = () => {
 
   const [value, setValue] = useState('0')
 
+  // genre tabs don't fit on small screens, so make them scrollable there
+  const theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('lg'))
+
   const handleSearch = event => {
     event.preventDefault()
-    navigate(`/search/${query}`)
+    if (!query.trim()) return // nothing to search for
+    navigate(`/search/${encodeURIComponent(query.trim())}`)
     // when clicked search, take user to that page
     setQuery('')
     setValue('0')
@@ -40,17 +45,20 @@ const Header = () => {
 
         <Toolbar
           sx={{
-            height: '100px',
+            height: { xs: 'auto', md: '100px' },
             display: 'flex',
             flexDirection: 'row',
-            justifyContent: 'space-between'
+            flexWrap: { xs: 'wrap', md: 'nowrap' },
+            justifyContent: 'space-between',
+            paddingY: { xs: '8px', md: 0 }
           }}
         >
 
           <Box
             sx={{
-              marginTop: '26px',
-              marginLeft: '20px'
+              marginTop: { xs: 0, md: '26px' },
+              marginLeft: { xs: 0, md: '20px' },
+              '& img': { height: { xs: '60px', md: '100px' } }
             }}
           >
             <Link to='/'>
@@ -59,10 +67,14 @@ const Header = () => {
           </Box>
 
           <FormControl
+            component="form"
             onSubmit={handleSearch}
             sx={{
               display: 'flex',
-              flexDirection: 'row'
+              flexDirection: 'row',
+              order: { xs: 1, md: 0 },
+              width: { xs: '100%', md: 'auto' },
+              marginTop: { xs: '8px', md: 0 }
             }}
           >
 
@@ -84,7 +96,7 @@ const Header = () => {
             <Button
               variant="contained"
               size="small"
-              onClick={handleSearch}
+              type="submit"
               sx={{
                 marginLeft: '2px',
                 bgcolor: '#d82679',
@@ -110,13 +122,16 @@ const Header = () => {
 
           <Tabs
             onChange={handleText}
-            centered
+            centered={!isSmallScreen}
+            variant={isSmallScreen ? 'scrollable' : 'standard'}
+            scrollButtons="auto"
+            allowScrollButtonsMobile
             value={value}
             indicatorColor="primary"
           >
             <Tab value="0" label="Home" component={Link} to="/" sx={{ fontWeight: '700' }} />
             <Tab value="1" label="Fiction" sx={{ fontWeight: '700' }}/>
-            <Tab value="2" label="Nonfiction" sx={{ fontWeight: '700' }}/>
+            <Tab value="2" label="Psychology" sx={{ fontWeight: '700' }}/>
             <Tab value="3" label="Science" sx={{ fontWeight: '700' }}/>
             <Tab value="4" label="Politics" sx={{ fontWeight: '700' }}/>
             <Tab value="5" label="Business" sx={{ fontWeight: '700' }}/>

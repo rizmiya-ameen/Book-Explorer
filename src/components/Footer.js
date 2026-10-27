@@ -36,7 +36,7 @@ const Footer = () => {
       </Box>
 
       <Box className="contact-info">
-        Contact us: <a href="mailto:contact@bookworm.com">contact@bookworm.com</a> | Phone: +123456789
+        Built by <a href="https://github.com/rizmiya-ameen">Fathima Rizmiya</a> | Book data from the <a href="https://developers.google.com/books">Google Books API</a>
       </Box>
 
       <Box className="copyright">

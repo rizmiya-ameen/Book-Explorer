@@ -2,30 +2,39 @@ import './styles/SearchResults.css'
 import React, { useEffect, useState } from 'react'
 import { useParams, Link } from "react-router-dom"
 import { BOOKS_API_KEY } from "./config/Key"
-import { Pagination, Stack, Grid, Typography, Box, Paper, Container, Rating } from '@mui/material'
+import { Pagination, Stack, Grid, Typography, Box, Paper, Container, Rating, CircularProgress } from '@mui/material'
 
 const SearchResults = () => {
 
   const params = useParams()
 
   const [searchedBooks, setSearchedBooks] = useState([])
+  const [totalItems, setTotalItems] = useState(0)
+  const [loading, setLoading] = useState(true)
 
   const [startIndex, setStartIndex] = useState(0)
   const itemsPerPage = 20;
   const currentPage = Math.floor(startIndex / itemsPerPage) + 1;
+  const pageCount = Math.min(5, Math.ceil(totalItems / itemsPerPage));
 
   const handleSearchedBooks = () => {
+    // set when a newer search starts, so a slow older response can't overwrite its results
+    let ignore = false;
     setSearchedBooks([]);
+    setLoading(true);
+
+    const searchText = encodeURIComponent(params.queryText || params.Text);
 
     (params.queryText ?
-      fetch(`https://www.googleapis.com/books/v1/volumes?q=${params.queryText}+intitle:${params.queryText}&key=${BOOKS_API_KEY}&langRestrict=en&orderBy=newest&startIndex=${startIndex}&maxResults=20&printType=books`)
+      fetch(`https://www.googleapis.com/books/v1/volumes?q=${searchText}+intitle:${searchText}&key=${BOOKS_API_KEY}&langRestrict=en&startIndex=${startIndex}&maxResults=20&printType=books`)
       :
-      fetch(`https://www.googleapis.com/books/v1/volumes?q=subject:${params.Text}&orderBy=newest&startIndex=${startIndex}&maxResults=20&key=${BOOKS_API_KEY}&langRestrict=en`)
+      fetch(`https://www.googleapis.com/books/v1/volumes?q=subject:${searchText}+book&orderBy=newest&startIndex=${startIndex}&maxResults=20&key=${BOOKS_API_KEY}&langRestrict=en`)
     )
 
       .then(res => res.json())
 
       .then(res => {
+        if (ignore) return;
         const uniqueISBNs = new Set();
 
         const nonDuplicate = res && res.items && res.items.filter(item => {
@@ -33,22 +42,32 @@ const SearchResults = () => {
           const industryIdentifiers = item.volumeInfo.industryIdentifiers
 
           const isbn13 = item && item.volumeInfo && industryIdentifiers && industryIdentifiers.length > 0 && industryIdentifiers.find(identifier => identifier.type === 'ISBN_13')?.identifier;
-          if (isbn13 && !uniqueISBNs.has(isbn13)) {
-            uniqueISBNs.add(isbn13);
+          // many books have no ISBN-13, so fall back to the Google Books id
+          const uniqueKey = isbn13 || item.id;
+          // the same book often comes back several times under different ISBNs, so check the title too
+          const title = item.volumeInfo.title?.toLowerCase();
+          if (!uniqueISBNs.has(uniqueKey) && !uniqueISBNs.has(title)) {
+            uniqueISBNs.add(uniqueKey);
+            uniqueISBNs.add(title);
             return true;
           }
           return false
         });
 
         setSearchedBooks(nonDuplicate);
-        console.log(nonDuplicate)
+        setTotalItems(res.totalItems || 0);
+      })
+      .catch(error => console.error(error))
+      .finally(() => {
+        if (!ignore) setLoading(false);
       })
 
+    return () => { ignore = true };
   }
 
 
   useEffect(() => {
-    setStartIndex(1);
+    setStartIndex(0);
   }, [params.queryText, params.Text]);
 
   const handlePageChange = (event, page) => {
@@ -62,7 +81,7 @@ const SearchResults = () => {
 
   return (
 
-    <Container sx={{ marginY: '200px' }}>
+    <Container sx={{ marginY: '200px', paddingX: { xs: 0, sm: '24px' } }}>
 
       <Box
         sx={{
@@ -71,12 +90,14 @@ const SearchResults = () => {
         }}
       >
 
-        {!searchedBooks || searchedBooks.length === 0 ? (
+        {loading ? (
+          <CircularProgress />
+        ) : !searchedBooks || searchedBooks.length === 0 ? (
           <Box>
             <Typography>
               Your search - <strong>{params.queryText || params.Text}</strong> - did not match any books
             </Typography>
-            <img src='/PageNotFound.gif' alt='' height='350px' />
+            <img src='/PageNotFound.gif' alt='' height='350px' style={{ maxWidth: '100%', objectFit: 'contain' }} />
           </Box>
         ) : (
           <Typography>
@@ -87,7 +108,7 @@ const SearchResults = () => {
       </Box>
 
 
-      <Grid container spacing={5} sx={{ marginY: '10px' }}>
+      <Grid container spacing={{ xs: 2, sm: 3, lg: 5 }} sx={{ marginY: '10px' }}>
 
         {searchedBooks && searchedBooks.map(item => {
 
@@ -98,13 +119,13 @@ const SearchResults = () => {
 
             return (
 
-              <Grid key={id} item xs={2.4}>
+              <Grid key={id} item xs={6} sm={4} md={3} lg={2.4}>
 
                 <Paper
                   key={id}
                   elevation={3}
                   sx={{
-                    height: '400px',
+                    height: { xs: '420px', lg: '400px' },
                     display: 'flex',
                     flexDirection: 'column',
                     position: 'relative',
@@ -183,8 +204,9 @@ const SearchResults = () => {
                           sx={{
                             fontSize: '12px',
                             position: 'absolute',
-                            bottom: '8px',
-                            right: '9px'
+                            bottom: { xs: '30px', lg: '8px' },
+                            right: { xs: 'auto', lg: '9px' },
+                            left: { xs: '9px', lg: 'auto' }
                           }}
                         >
                           ({ratingsCount} reviews)
@@ -214,7 +236,7 @@ const SearchResults = () => {
       {searchedBooks && searchedBooks.length > 0 &&
         <Stack spacing={5} sx={{ marginTop: '50px' }}>
           <Pagination
-            count={5}
+            count={pageCount}
             variant="outlined"
             shape="rounded"
             page={currentPage}

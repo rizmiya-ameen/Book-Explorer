@@ -31,7 +31,7 @@ const Favorite = () => {
 
   return (
 
-    <Container sx={{ marginY: '50px' }}>
+    <Container sx={{ marginY: '50px', paddingX: { xs: 0, sm: '24px' } }}>
 
       <AppBar
         position="fixed"
@@ -49,15 +49,16 @@ const Favorite = () => {
           <Link to={'/'}>
             <Box
               sx={{
-                marginTop: '50px',
-                marginLeft: '15px'
+                marginTop: { xs: '35px', md: '50px' },
+                marginLeft: { xs: 0, md: '15px' },
+                '& img': { height: { xs: '70px', md: '95px' } }
               }}
             >
               <img src='/bookworm3.png' alt='Book Worm' height='95px' />
             </Box>
           </Link>
 
-          <Typography sx={{ color: 'white', letterSpacing: '3px' }}>
+          <Typography sx={{ color: 'white', letterSpacing: { xs: '1px', sm: '3px' } }}>
             Favorite Books ({favorite.length})
           </Typography>
 
@@ -65,11 +66,11 @@ const Favorite = () => {
 
       </AppBar>
 
-      <Grid container spacing={5} sx={{ marginY: '10px' }}>
+      <Grid container spacing={{ xs: 2, sm: 3, lg: 5 }} sx={{ marginY: '10px' }}>
 
         {favorite && favorite.map(item => (
 
-          <Grid key={item.id} item xs={2.4}>
+          <Grid key={item.id} item xs={6} sm={4} md={3} lg={2.4}>
 
             <Paper
               elevation={3}

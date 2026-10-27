@@ -4,3 +4,11 @@
  object-fit: cover;
 
 }
+
+/* on smaller screens show the whole banner instead of cropping it */
+@media (max-width: 899px) {
+  .image-header {
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+}

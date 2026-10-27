@@ -21,13 +21,13 @@ function ShelfSelection({ books, handleRemovalofOne, handleMoveToNext, buttonTex
     },
     mobile: {
       breakpoint: { max: 464, min: 0 },
-      items: 1
+      items: 2
     }
   }
 
   return (
 
-    <Container>
+    <Container sx={{ paddingX: { xs: '8px', sm: '24px' } }}>
 
       <Carousel responsive={responsive}>
 

@@ -26,8 +26,9 @@ const NotFoundPage = () => {
           <Link to={'/'}>
             <Box
               sx={{
-                marginTop: '50px',
-                marginLeft: '15px'
+                marginTop: { xs: '35px', md: '50px' },
+                marginLeft: { xs: 0, md: '15px' },
+                '& img': { height: { xs: '65px', md: '85px' } }
               }}
             >
               <img src='/bookworm2.png' alt='Book Worm' height='85px' />

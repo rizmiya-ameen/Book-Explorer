@@ -12,8 +12,8 @@ const BookDetailsHeader = ({ handleMyShelf, book, title, authors, publishedDate,
         elevation={3}
         sx={{
           display: 'flex',
-          flexDirection: 'row',
-          padding: '30px',
+          flexDirection: { xs: 'column-reverse', md: 'row' },
+          padding: { xs: '20px', md: '30px' },
           position: 'relative'
         }}
       >
@@ -21,15 +21,15 @@ const BookDetailsHeader = ({ handleMyShelf, book, title, authors, publishedDate,
         <Box
           sx={{
             flex: '2',
-            paddingRight: '80px'
+            paddingRight: { xs: 0, md: '80px' }
           }}
         >
 
           <Typography
             sx={{
-              fontSize: '30px',
+              fontSize: { xs: '24px', md: '30px' },
               fontWeight: 'bold',
-              marginBottom: '30px'
+              marginBottom: { xs: '15px', md: '30px' }
             }}
           >
             {title}
@@ -61,8 +61,10 @@ const BookDetailsHeader = ({ handleMyShelf, book, title, authors, publishedDate,
               display: 'flex',
               flexDirection: 'row',
               alignItems: 'center',
-              columnGap: '30px',
-              marginY: '50px'
+              flexWrap: 'wrap',
+              columnGap: { xs: '15px', md: '30px' },
+              rowGap: '15px',
+              marginY: { xs: '30px', md: '50px' }
             }}
           >
 
@@ -72,7 +74,7 @@ const BookDetailsHeader = ({ handleMyShelf, book, title, authors, publishedDate,
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  paddingRight: '30px',
+                  paddingRight: { xs: '15px', md: '30px' },
                   borderRight: '1px solid grey'
                 }}
               >
@@ -94,7 +96,7 @@ const BookDetailsHeader = ({ handleMyShelf, book, title, authors, publishedDate,
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  paddingRight: '30px',
+                  paddingRight: { xs: '15px', md: '30px' },
                   borderRight: '1px solid grey'
                 }}
               >
@@ -115,7 +117,7 @@ const BookDetailsHeader = ({ handleMyShelf, book, title, authors, publishedDate,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                paddingRight: '30px'
+                paddingRight: { xs: '15px', md: '30px' }
               }}
             >
               {industryIdentifiers && industryIdentifiers.length > 0 && (
@@ -134,9 +136,12 @@ const BookDetailsHeader = ({ handleMyShelf, book, title, authors, publishedDate,
 
           <Box
             sx={{
-              marginTop: '50px',
-              position: 'absolute',
-              bottom: '30px'
+              marginTop: { xs: 0, md: '50px' },
+              position: { xs: 'static', md: 'absolute' },
+              bottom: '30px',
+              display: 'flex',
+              flexWrap: 'wrap',
+              rowGap: '10px'
             }}
           >
 
@@ -202,13 +207,14 @@ const BookDetailsHeader = ({ handleMyShelf, book, title, authors, publishedDate,
           sx={{
             flex: '1',
             display: 'flex',
-            justifyContent: 'flex-end'
+            justifyContent: { xs: 'center', md: 'flex-end' },
+            marginBottom: { xs: '20px', md: 0 }
           }}
         >
 
           <Card
             sx={{
-              height: '400px',
+              height: { xs: '300px', md: '400px' },
               boxShadow: '5'
             }}
           >

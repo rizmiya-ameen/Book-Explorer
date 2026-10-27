@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
 import { BOOKS_API_KEY } from "./config/Key"
-import { Typography, Box, Paper, Container, Button, AppBar, Toolbar, } from '@mui/material'
+import { Typography, Box, Paper, Container, Button, AppBar, Toolbar, CircularProgress } from '@mui/material'
 import GoogleIcon from '@mui/icons-material/Google';
 import NotFoundPage from './NotFoundPage'
 import BookDetailsHeader from './components/BookDetailsHeader';
@@ -12,13 +12,17 @@ const BookDetail = () => {
   const params = useParams()
 
   const [book, setBook] = useState({})
+  const [loading, setLoading] = useState(true)
 
 
   const handleBooks = () => {
 
+    setLoading(true)
     fetch(`https://www.googleapis.com/books/v1/volumes/${params.bookID}?key=${BOOKS_API_KEY}`)
       .then(res => res.json())
       .then(res => setBook(res))
+      .catch(error => console.error(error))
+      .finally(() => setLoading(false))
     //.then(res => console.log(res))
 
   };
@@ -127,10 +131,15 @@ const BookDetail = () => {
         marginTop: '150px',
         display: 'flex',
         flexDirection: 'column',
+        paddingX: { xs: 0, sm: '24px' }
       }}
     >
 
-      {params.bookID === id ?
+      {loading ?
+
+        <CircularProgress sx={{ alignSelf: 'center' }} />
+
+        : params.bookID === id ?
 
         <Box>
 
@@ -155,8 +164,9 @@ const BookDetail = () => {
 
                 <Box
                   sx={{
-                    marginTop: '50px',
-                    marginLeft: '15px'
+                    marginTop: { xs: '35px', md: '50px' },
+                    marginLeft: { xs: 0, md: '15px' },
+                    '& img': { height: { xs: '70px', md: '95px' } }
                   }}
                 >
                   <img src='/bookworm3.png' alt='Book Worm' height='95px' />
@@ -165,9 +175,12 @@ const BookDetail = () => {
               </Link>
 
               <Typography
+                noWrap
                 sx={{
                   color: 'white',
-                  letterSpacing: '3px'
+                  letterSpacing: { xs: '1px', sm: '3px' },
+                  minWidth: 0,
+                  marginLeft: '16px'
                 }}
               >
                 {title}
@@ -199,8 +212,8 @@ const BookDetail = () => {
           <Paper
             elevation={3}
             sx={{
-              marginY: '50px',
-              padding: '30px'
+              marginY: { xs: '30px', md: '50px' },
+              padding: { xs: '20px', md: '30px' }
             }}
           >
 
@@ -217,7 +230,7 @@ const BookDetail = () => {
                   </strong>
                 </Typography>
 
-                <Typography align="justify">{removeHTMLTags(description)}</Typography>
+                <Typography sx={{ textAlign: { xs: 'left', md: 'justify' } }}>{removeHTMLTags(description)}</Typography>
               </>
               :
               null

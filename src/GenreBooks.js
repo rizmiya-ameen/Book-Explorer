@@ -12,7 +12,8 @@ const GenreBooks = ({ fetchedBooks }) => {
     <Container
       sx={{
         marginTop: '15px',
-        marginBottom: '60px'
+        marginBottom: '60px',
+        paddingX: { xs: 0, lg: '24px' }
       }}
     >
 
@@ -25,13 +26,13 @@ const GenreBooks = ({ fetchedBooks }) => {
           if (imageLinks && title && volumeInfo && authors && authors.length > 0) {
             return (
 
-              <Grid key={id} item xs={2.4}>
+              <Grid key={id} item xs={6} sm={4} lg={2.4}>
 
                 <Paper
                   key={id}
                   elevation={3}
                   sx={{
-                    height: '400px',
+                    height: { xs: '420px', lg: '400px' },
                     display: 'flex',
                     flexDirection: 'column',
                     position: 'relative',
@@ -111,8 +112,9 @@ const GenreBooks = ({ fetchedBooks }) => {
                           sx={{
                             fontSize: '12px',
                             position: 'absolute',
-                            bottom: '8px',
-                            right: '9px'
+                            bottom: { xs: '30px', lg: '8px' },
+                            right: { xs: 'auto', lg: '9px' },
+                            left: { xs: '9px', lg: 'auto' }
                           }}
                         >
                           ({ratingsCount} {ratingsCount === 1 ? 'review' : 'reviews'})

@@ -51,3 +51,16 @@
   transform: translateY(30px);
   transition: 0.5s;
 }
+
+@media (hover: none) {
+  .book-card {
+    padding: 0.75rem;
+  }
+  .book-card:before {
+    opacity: 1;
+  }
+  .book-info {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}

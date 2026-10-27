@@ -34,8 +34,6 @@ const HeaderIcons = () => {
     }
   }, [])
 
-  console.log(myShelfBooksCount)
-
   return (
 
     <Box sx={{ display: 'flex', flexDirection: 'row' }}>
@@ -72,7 +70,7 @@ const HeaderIcons = () => {
             sx={{
               color: 'white',
               backgroundColor: '#625694',
-              marginRight: '24px'
+              marginRight: { xs: 0, md: '24px' }
             }}
           >
             <Badge badgeContent={myShelfBooksCount} color="error">

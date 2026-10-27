@@ -86,7 +86,7 @@ const MyShelf = () => {
 
   return (
 
-    <Container sx={{ marginY: '120px' }}>
+    <Container sx={{ marginY: '120px', paddingX: { xs: 0, sm: '24px' } }}>
 
       <AppBar
         position="fixed"
@@ -108,8 +108,9 @@ const MyShelf = () => {
 
             <Box
               sx={{
-                marginTop: '50px',
-                marginLeft: '15px'
+                marginTop: { xs: '35px', md: '50px' },
+                marginLeft: { xs: 0, md: '15px' },
+                '& img': { height: { xs: '70px', md: '95px' } }
               }}
             >
               <img src='/bookworm3.png' alt='Book Worm' height='95px' />
@@ -120,7 +121,7 @@ const MyShelf = () => {
           <Typography
             sx={{
               color: 'white',
-              letterSpacing: '3px'
+              letterSpacing: { xs: '1px', sm: '3px' }
             }}
           >
             My Shelf ({myShelfBooksCount})

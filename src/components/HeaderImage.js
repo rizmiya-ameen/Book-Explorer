@@ -27,7 +27,7 @@ const HeaderImage = () => {
 
   return (
 
-    <Container>
+    <Container sx={{ paddingX: { xs: 0, lg: '24px' } }}>
 
       <Carousel
         responsive={responsive}
